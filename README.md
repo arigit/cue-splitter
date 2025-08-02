@@ -39,6 +39,7 @@ Feel free to improve it, pull requests are welcome!
 ## Major Dependencies
 
 Dependencies: 
+* GNOME environment, recent: GTK4, Libadwaita
 * python3
 * ffmpeg
 * flac
