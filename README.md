@@ -1,0 +1,31 @@
+# cue-splitter
+A GTK4/libadwaita cuesheet-splitter GUI App, meant to split single-file FLAC into per-track Orgs. 
+Depends on ffmpeg, rsgain and other utilities and libraries.
+
+It is meant as a tool for digital audio fans/audiophiles that keep their collection as single-file FLAC files but occasionally want
+to export "ogg" files for their digial audio player.
+
+It handles 24-bit / high bit rate sources with no issue.
+
+Simple GUI and command line app that can accept drag and drop files from File Manager 
+Allows inputting a command line (script and parameters) to be run on each of the URIs secuentially.
+Multithreaded: it uses concurrency for the song split and replay gain analysis; shows real time status; logs output.
+Integrates well with "nautilus-scripts" to allow right-clicking a cuesheet and splitting it.
+
+ Uses Python / PyGI / LibAdwaita (GTK4)
+
+## Coding Style
+
+The coding style is horrible, you have been warned.
+
+Coding started ~20 years ago when I was learning python, and trying to add a linux/gnome GUI to a bash script.
+
+It started as a python2/GTK2 app, then got ported to python3/GTK3, and now it looks much nicer, using GTK4/Libadwaita. 
+There are traces of old code and bad code practices all over. 
+
+Feel free to improve it, pull requests are welcome!
+
+
+
+<img width="474" height="817" alt="image" src="https://github.com/user-attachments/assets/703ac15e-321f-4608-a2dc-6a9db20435af" />
+
