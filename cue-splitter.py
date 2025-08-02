@@ -19,7 +19,7 @@ __website__ = ""
 __copyright__ = "Copyright \xc2\xa9 2008-2025 " + __author__
 __license__ = "GPLv3"
 __comments__ = "Splits single-file+cuesheet audio images (flac, ape, wv, wav)\nin per-track tagged ogg vorbis, mp3 or flac files"
-__debug_mode__ = False
+__debug_mode__ = True
 
 # Script Configuration
 default_output_directory = "/media/mediastore1/Audio-Vorbis/Music Library - Vorbis/AA - Nuevos"
@@ -183,7 +183,6 @@ class MainWindow(Gtk.ApplicationWindow):
         self.add_action(action)  # Here the action is being added to the window instead of the app
         menu.append("Quit", "win.quit")  # action attached to window
 
-
         # Main layout containers
         # concept: 
         #   1 Vertical, containing 3 child boxes stacked
@@ -223,9 +222,10 @@ class MainWindow(Gtk.ApplicationWindow):
         self.label2 = Gtk.Label()
         self.label2.set_markup("<b>Output Folder:</b>")
         self.label2.set_valign(Gtk.Align.CENTER) 
-        default_output_folder_name = os.path.basename(default_output_directory)
+        
+        default_output_folder_name = os.path.basename(options.output_directory)            
         self.button2 = Gtk.Button(label=default_output_folder_name)
-        self.button2.set_tooltip_text("Selected: " + default_output_directory)
+        self.button2.set_tooltip_text("Selected: " + options.output_directory)
         self.button2.set_hexpand(True)
         self.button2.connect("clicked", self.on_output_folder_select_button_clicked)
 
@@ -535,7 +535,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
     def on_output_folder_select_button_clicked(self, button):
         dialog = Gtk.FileDialog()
-        initial_folder = Gio.File.new_for_path(default_output_directory)
+        initial_folder = Gio.File.new_for_path(options.output_directory)
         dialog.set_initial_folder(initial_folder)
         def on_folder_selected(dialog, result):
             try:
@@ -1414,6 +1414,9 @@ class MyApp(Adw.Application):
         )
 
         (options, args) = parser.parse_args()
+
+        if  not os.path.isdir(options.output_directory): 
+            options.output_directory = os.path.expanduser('~')
 
         if len(args) >= 1:            
             if not os.path.isabs(args[0]):
