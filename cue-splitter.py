@@ -64,8 +64,6 @@ options = "" # global command line options
   -q QUALITY, --quality=QUALITY
                         specify the quality target for the encoder, [default:
                         6]
-  -g, --display-gui     indicates whether to use a Graphical User Interface or
-                        not, [default: True]
 
   Quality: 
      for ogg: quality parameter (default: 6, which is roughly 192Kbps)
@@ -412,15 +410,22 @@ class MainWindow(Gtk.ApplicationWindow):
         return True  # Indicates drop was successful
 
     def update_scrolled_list(self, *args):
+        # called when the Process Multiple Cuesheets checkbox is toggled
         self.list_box.remove_all()    
         if self.check_button_multiple_cuesheets.get_active():
-            # Try to get the full path from the file selector tooltip (button1), if there is one
-            single_path = self.button1.get_tooltip_text()
-            if single_path and single_path.startswith("Selected: "):
-                single_path = single_path[len("Selected: "):]  # Remove the prefix
-                if single_path not in self.cuesheet_list:
-                    self.cuesheet_list.insert(0, single_path)
-        string_list = self.cuesheet_list
+            # will use the selected cuesheet file, if there was one
+            self.button1.set_label("Select Cuesheet File")
+            self.button1.set_tooltip_text("")
+            string_list = self.cuesheet_list
+        else:
+            # process single cuesheet, use the first one in the list
+            # remove all others from the list
+            if len(self.cuesheet_list) > 0:
+                self.cuesheet_list = [self.cuesheet_list[0]]
+                self.button1.set_label(os.path.basename(self.cuesheet_list[0]))
+                self.button1.set_tooltip_text("Selected: " + self.cuesheet_list[0])
+            string_list = None
+        
         if not string_list: 
             string_list = [" (Cuesheet List) "]
 
@@ -1402,15 +1407,6 @@ class MyApp(Adw.Application):
             dest="quality",
             default="6",
             help="specify the quality target for the encoder (ogg only), [default: %default]",
-        )
-
-        parser.add_option(
-            "-g",
-            "--display-gui",
-            action="store_false",
-            dest="gui",
-            default=True,
-            help="indicates whether to use a Graphical User Interface or not, [default: %default]",
         )
 
         (options, args) = parser.parse_args()
